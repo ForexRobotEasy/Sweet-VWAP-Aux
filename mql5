@@ -1,0 +1,111 @@
+
+// Program: Sweet VWAP Aux
+// Developer: Forex Robot Easy Team
+// Developer's Site: forexroboteasy.com
+
+// Include necessary libraries
+#include <Trade\Trade.mqh>
+#include <Arrays\ArrayObj.mqh>
+#include <Indicators\Indicators.mqh>
+
+// Define global variables
+CTrade trade;
+CVWAP vwap;
+
+// Define input parameters
+input int period = 10; // VWAP calculation period
+input double deviation = 1.0; // VWAP deviation for trading signals
+
+// Define function to calculate and display real-time VWAP
+void CalculateVWAP()
+{
+   double vwapValue = vwap.Main(period);
+   Print('Current VWAP Value: ', vwapValue);
+}
+
+// Define function to generate historical VWAP data
+void GenerateHistoricalVWAP()
+{
+   CArrayObj* vwapData = new CArrayObj();
+   for (int i = 0; i < Bars; i++)
+   {
+      double vwapValue = vwap.Main(period, i);
+      vwapData.Add(vwapValue);
+   }
+   // Display historical VWAP data for analysis and comparison
+   for (int i = 0; i < vwapData.Total(); i++)
+   {
+      Print('Historical VWAP Data at Bar ', i, ': ', vwapData[i]);
+   }
+   delete vwapData;
+}
+
+// Define function to display VWAP data and trading results
+void DisplayVWAPDataAndResults()
+{
+   double vwapValue = vwap.Main(period);
+   double deviationValue = deviation * vwap.StdDev(period);
+   Print('Current VWAP Value: ', vwapValue);
+   Print('VWAP Deviation: ', deviationValue);
+   // Add code to display VWAP data and trading results on user-friendly interface
+}
+
+// Define function to generate trading signals based on VWAP trends and market conditions
+void GenerateTradingSignals()
+{
+   double vwapValue = vwap.Main(period);
+   double deviationValue = deviation * vwap.StdDev(period);
+   double upperBand = vwapValue + deviationValue;
+   double lowerBand = vwapValue - deviationValue;
+   if (Close > upperBand)
+   {
+      trade.Buy();
+   }
+   else if (Close < lowerBand)
+   {
+      trade.Sell();
+   }
+}
+
+// Define function to place and execute orders based on VWAP analysis
+void PlaceAndExecuteOrders()
+{
+   double vwapValue = vwap.Main(period);
+   double deviationValue = deviation * vwap.StdDev(period);
+   double upperBand = vwapValue + deviationValue;
+   double lowerBand = vwapValue - deviationValue;
+   double lotSize = trade.Lots();
+   if (Close > upperBand)
+   {
+      trade.Buy(lotSize);
+   }
+   else if (Close < lowerBand)
+   {
+      trade.Sell(lotSize);
+   }
+}
+
+// Define function to run the Sweet VWAP Aux software
+void RunSweetVWAPAux()
+{
+   // Add code to configure market analysis tools for trend identification and liquidity assessment
+   
+   // Add code to enable traders to set custom parameters for VWAP calculation and analysis
+   
+   // Add code to ensure compatibility with major forex trading platforms and APIs
+   
+   // Add code to conduct rigorous testing for accurate calculation and reliable performance of the software
+   
+   // Add code to call the necessary functions for real-time VWAP calculation, historical VWAP generation, VWAP data and results display, trading signal generation, and order placement and execution
+   CalculateVWAP();
+   GenerateHistoricalVWAP();
+   DisplayVWAPDataAndResults();
+   GenerateTradingSignals();
+   PlaceAndExecuteOrders();
+}
+
+// Run the Sweet VWAP Aux software
+void OnTick()
+{
+   RunSweetVWAPAux();
+}
